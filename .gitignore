@@ -13,6 +13,9 @@ tmp.*
 temp.*
 *.tmp
 *.temp
+/release
+/release.*
+/*.release
 
 # Logs
 logs
