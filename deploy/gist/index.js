@@ -37,7 +37,7 @@ const CONTAINER = join(__dirname, '..', '..', 'out')
 const LIST = readdirSync(CONTAINER)
 
 const filename = item => {
-  const {name, extname} = parse(item)
+  const {name, ext} = parse(item)
   return name + '-' + PROJECT_VERSION + extname
 }
 
