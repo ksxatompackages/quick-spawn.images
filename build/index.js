@@ -13,7 +13,7 @@ const ENCODING = {encoding: 'utf8'}
 const scripts = readdirSync(join(RESOURCE, 'variants'))
   .map(
     item =>
-      [join(src, item), parsePath(item)]
+      [join(RESOURCE, item), parsePath(item)]
   )
   .map(
     ([script, {name}]) =>
