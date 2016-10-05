@@ -10,6 +10,7 @@ const GitHubAPIs = require('github')
 
 const {
   env: {
+    RELEASE_GIST,
     GIST_TOKEN,
     GIST_ID,
     PROJECT_VERSION
