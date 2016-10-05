@@ -22,7 +22,7 @@ const scripts = readdirSync(SCRIPTS)
   )
 
 BUILD_MODE === 'Debug' || write(false, 'min')
-BUILD_MODE === 'Release' || write('\x20\x20', 'pretty')
+write('\x20\x20', 'pretty')
 
 console.log(`Build succeed!\nArtifacts are located at ${OUTPUT}`)
 
