@@ -9,5 +9,5 @@
     exit 2
   )
 ) && (
-  source ./sh/lib/init-dir-list.sh && BUILD_MODE=Debug ./sh/build.sh
+  BUILD_MODE=Debug ./sh/build.sh
 )
