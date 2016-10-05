@@ -1,3 +1,3 @@
 echo 'Building...'
-node $(pwd)/build
+source ./sh/init-env.sh || exit 1
 echo 'Done'
