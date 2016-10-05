@@ -7,13 +7,14 @@ const pug = require('pug')
 const PROJECT = dirname(__dirname)
 const OUTPUT = join(PROJECT, 'out')
 const RESOURCE = join(PROJECT, 'src')
+const SCRIPTS = join(RESOURCE, 'variants')
 const PUGSOURCE = readFileSync(join(RESOURCE, 'model.pug'))
 const ENCODING = {encoding: 'utf8'}
 
-const scripts = readdirSync(join(RESOURCE, 'variants'))
+const scripts = readdirSync(SCRIPTS)
   .map(
     item =>
-      [join(RESOURCE, item), parsePath(item)]
+      [join(SCRIPTS, item), parsePath(item)]
   )
   .map(
     ([script, {name}]) =>
