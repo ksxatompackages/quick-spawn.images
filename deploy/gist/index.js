@@ -62,8 +62,8 @@ new Promise(
           const rfiles = response.files
           let summary = `# Release ${PROJECT_VERSION} - ${NOW.toISOString()}\n\n`
           for (const item of LIST) {
-            const {raw_url, type, language} = rfiles[filename(item)]
-            summary += ` * [${item}](${raw_url})\n  - Type: ${type}\n  - Language: ${language}\n\n`
+            const {raw_url: url, type, language} = rfiles[filename(item)]
+            summary += ` * [${item}](${url})\n  - Type: ${type}\n  - Language: ${language}\n\n`
           }
           github.gists.edit({
             id: GIST_ID,
