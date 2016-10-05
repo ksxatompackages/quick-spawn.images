@@ -8,6 +8,7 @@ before_script:
   - chmod +x sh/*
 
 before_deploy:
+  - chmod +x sh/*
   - source ./sh/deploy/travis-ci/before.sh
 
 deploy:
