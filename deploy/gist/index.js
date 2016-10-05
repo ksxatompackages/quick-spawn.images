@@ -68,7 +68,9 @@ new Promise(
           github.gists.edit({
             id: GIST_ID,
             files: {
-              [ filename('summary.md') ]: summary
+              [ filename('summary.md') ]: {
+                content: summary
+              }
             }
           })
             .then(resolve)
