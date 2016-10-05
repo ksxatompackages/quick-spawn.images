@@ -38,7 +38,7 @@ const LIST = readdirSync(CONTAINER)
 
 const filename = item => {
   const {name, ext} = parse(item)
-  return name + '-' + PROJECT_VERSION + extname
+  return name + '-' + PROJECT_VERSION + ext
 }
 
 for (const item of LIST) {
