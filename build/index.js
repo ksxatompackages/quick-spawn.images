@@ -2,7 +2,7 @@
 
 const {join, dirname, parse: parsePath} = require('path')
 const {writeFileSync, readdirSync, readFileSync} = require('fs')
-const {BUILD_MODE} = require('process').env
+const {BUILD_MODE, stdout} = require('process').env
 const pug = require('pug')
 const PROJECT = dirname(__dirname)
 const OUTPUT = join(PROJECT, 'out')
@@ -23,6 +23,8 @@ const scripts = readdirSync(SCRIPTS)
 
 BUILD_MODE === 'Debug' || write(false, 'release')
 BUILD_MODE === 'Release' || write('\x20\x20', 'debug')
+
+stdout.write(`Build succeed!\nArtifacts are located at ${OUTPUT}\n`)
 
 function write (pretty, entry) {
   const OPTIONS = {
