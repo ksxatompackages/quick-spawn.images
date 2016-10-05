@@ -80,6 +80,9 @@ new Promise(
       .catch(reject)
   }
 )
+  .then(
+    () => stdout.write('Gist Upload succeed')
+  )
   .catch(
     () => {
       stderr.write('Upload to Gist failed.\n')
