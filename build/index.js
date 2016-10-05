@@ -21,8 +21,8 @@ const scripts = readdirSync(SCRIPTS)
       [require(script), name]
   )
 
-BUILD_MODE === 'Debug' || write(false, 'release')
-BUILD_MODE === 'Release' || write('\x20\x20', 'debug')
+BUILD_MODE === 'Debug' || write(false, 'min')
+BUILD_MODE === 'Release' || write('\x20\x20', 'pretty')
 
 console.log(`Build succeed!\nArtifacts are located at ${OUTPUT}`)
 
@@ -34,7 +34,7 @@ function write (pretty, entry) {
   return scripts
     .map(
       ([local, name]) =>
-        [local, join(OUTPUT, entry, name + '.svg'), pug.compile(PUGSOURCE, OPTIONS)]
+        [local, join(OUTPUT, `${name}.${entry}.svg`), pug.compile(PUGSOURCE, OPTIONS)]
     )
     .map(
       ([local, file, create]) =>
