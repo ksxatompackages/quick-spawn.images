@@ -1,5 +1,7 @@
 'use strict'
 
+require('./gist')
+
 const {join} = require('path')
 
 const {
