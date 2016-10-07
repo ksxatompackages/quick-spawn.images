@@ -13,7 +13,7 @@ const {
     RELEASE_GIST,
     GIST_TOKEN,
     GIST_ID,
-    PROJECT_VERSION
+    GIT_REPO_TAG
   },
   exit,
   stdout,
@@ -38,7 +38,7 @@ const LIST = readdirSync(CONTAINER)
 
 const filename = item => {
   const {name, ext} = parse(item)
-  return name + '-' + PROJECT_VERSION + ext
+  return name + '-' + GIT_REPO_TAG + ext
 }
 
 for (const item of LIST) {
@@ -60,7 +60,7 @@ new Promise(
       .then(
         response => {
           const rfiles = response.files
-          let summary = `# Release ${PROJECT_VERSION} - ${NOW.toISOString()}\n\n`
+          let summary = `# Release ${GIT_REPO_TAG} - ${NOW.toISOString()}\n\n`
           for (const item of LIST) {
             const {raw_url: url, type, language} = rfiles[filename(item)]
             summary += ` * [${item}](${url})\n  - Type: ${type}\n  - Language: ${language}\n\n`
