@@ -1,27 +1,36 @@
 doctype xml
 - const W3C = 'http://www.w3.org/'
-- const FONTSIZE = 30
-- const MESSAGE = 'Hello, World!!'
+- const WIDTH = 320
+- const HEIGHT = 64
+- const FONTSIZE = 50
+- const BORDERSIZE = 2
 svg(
   xmlns = W3C + '2000/svg'
   xlink = W3C + '1999/xlink'
-  width = width + 1
-  height = height + 1
+  width = WIDTH
+  height = HEIGHT
 )
   rect(
-    x = 1
-    y = 1
-    width = width
-    height = height
-    stroke = stroke
-    fill = fill
+    x = BORDERSIZE >> 1
+    y = BORDERSIZE >> 1
+    width = WIDTH - BORDERSIZE
+    height = HEIGHT - BORDERSIZE
+    stroke = color
+    fill = 'transparent'
+    stroke-width = BORDERSIZE
   )
   text(
-    x = width >> 3
-    y = height >> 1
-    stroke = stroke
-    fill = fill
+    x = WIDTH >> 1
+    y = HEIGHT >> 1
+    alignment-baseline = 'central'
+    text-anchor = 'middle'
     font-size = FONTSIZE
-    font-family = 'monospace'
+    stroke = color
+    fill = 'transparent'
+    stroke-width = BORDERSIZE
+    style = {
+      'text-transform': 'uppercase',
+      'font-family': 'Seogoe UI, Corbel, DejaVu Sans, Calibri, Vera, Roman, Tahoma, serif'
+    }
   )
-    | #{MESSAGE}
+    | #{text}
