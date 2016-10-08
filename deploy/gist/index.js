@@ -8,84 +8,69 @@ const {readFileSync, readdirSync} = require('fs')
 
 const GitHubAPIs = require('github')
 
+const co = require('co')
+
 const {
   env: {
     RELEASE_GIST,
     GIST_TOKEN,
     GIST_ID,
-    PROJECT_VERSION
-  },
-  exit,
-  stdout,
-  stderr
+    GIT_REPO_TAG
+  }
 } = require('process')
 
-if (!RELEASE_GIST) {
-  stdout.write('Skipped Gist release\n')
-  exit(1)
-}
+const {info, error} = global.console
 
-if (!GIST_ID || !GIST_TOKEN) {
-  stderr.write('Missing environment variables\n')
-  exit(1)
-}
+co(main)
 
-const github = new GitHubAPIs()
-const files = {}
-const ENCODING = {encoding: 'utf8'}
-const CONTAINER = join(__dirname, '..', '..', 'out')
-const LIST = readdirSync(CONTAINER)
-
-const filename = item => {
-  const {name, ext} = parse(item)
-  return name + '-' + PROJECT_VERSION + ext
-}
-
-for (const item of LIST) {
-  const content = readFileSync(join(CONTAINER, item), ENCODING)
-  files[filename(item)] = {content}
-}
-
-github.authenticate({
-  type: 'token',
-  token: GIST_TOKEN
-})
-
-new Promise(
-  (resolve, reject) => {
-    github.gists.edit({
-      id: GIST_ID,
-      files
-    })
-      .then(
-        response => {
-          const rfiles = response.files
-          let summary = `# Release ${PROJECT_VERSION} - ${NOW.toISOString()}\n\n`
-          for (const item of LIST) {
-            const {raw_url: url, type, language} = rfiles[filename(item)]
-            summary += ` * [${item}](${url})\n  - Type: ${type}\n  - Language: ${language}\n\n`
-          }
-          github.gists.edit({
-            id: GIST_ID,
-            files: {
-              [ filename('summary.md') ]: {
-                content: summary
-              }
-            }
-          })
-            .then(resolve)
-            .catch(reject)
-        }
-      )
-      .catch(reject)
+function * main () {
+  if (!RELEASE_GIST) {
+    info('Skipped Gist release')
+    error('Set RELEASE_GIST to TRUE if you want to deploy Gist Release schedule')
+    return Promise.resolve()
   }
-)
-  .then(
-    () => stdout.write('Gist Upload succeed')
+  if (!GIST_ID || !GIST_TOKEN) {
+    const {EnvironmentVariableError} = require('../lib/error.js')
+    const message = 'Missing GIST_ID or GIST_TOKEN'
+    const response = new EnvironmentVariableError(message)
+    error(response)
+    return Promise.reject(response)
+  }
+  const github = new GitHubAPIs()
+  const files = {}
+  const ENCODING = {encoding: 'utf8'}
+  const CONTAINER = join(__dirname, '..', '..', 'out')
+  const LIST = readdirSync(CONTAINER)
+  const filename = item => {
+    const {name, ext} = parse(item)
+    return name + '-' + GIT_REPO_TAG + ext
+  }
+  for (const item of LIST) {
+    const content = readFileSync(join(CONTAINER, item), ENCODING)
+    files[filename(item)] = {content}
+  }
+  github.authenticate({
+    type: 'token',
+    token: GIST_TOKEN
+  })
+  const artifactsResponse = yield github.gists.edit({
+    id: GIST_ID,
+    files
+  })
+  const rfiles = artifactsResponse.files
+  const summary = LIST.reduce(
+    (prev, item) => {
+      const {raw_url: url, type, language} = rfiles[filename(item)]
+      return prev + ` * [${item}](${url})\n  - Type: ${type}\n  - Language: ${language}\n\n`
+    },
+    `# Release ${GIT_REPO_TAG} - ${NOW.toISOString()}\n\n`
   )
-  .catch(
-    () => {
-      stderr.write('Upload to Gist failed.\n')
-      exit(2)
+  yield github.gists.edit({
+    id: GIST_ID,
+    files: {
+      [ filename('summary.md') ]: {
+        content: summary
+      }
     }
-  )
+  })
+}
