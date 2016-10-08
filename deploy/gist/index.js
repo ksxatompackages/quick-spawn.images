@@ -21,7 +21,6 @@ const {
 
 const {info, error} = global.console
 
-
 co(main)
 
 function * main () {
