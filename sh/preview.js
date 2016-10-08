@@ -15,4 +15,4 @@ writeFileSync(
   create({list, html: {style}}),
   ENCODING
 )
-console.log('Done')
+console.log('Created preview file')
