@@ -22,4 +22,10 @@ class GitHubError extends ServerError {
   }
 }
 
-module.exports = {ServerError, GitHubError}
+class EnvironmentVariableError extends ReferenceError {
+  get name () {
+    return 'EnvironmentVariableError'
+  }
+}
+
+module.exports = {ServerError, GitHubError, EnvironmentVariableError}
