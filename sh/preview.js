@@ -12,7 +12,7 @@ const style = {
 }
 writeFileSync(
   join(__dirname, '..', '.preview.html'),
-  create({list, html: {style}}),
+  create({list, html: {style}}) + '\n',
   ENCODING
 )
 console.log('Created preview file')
