@@ -25,13 +25,17 @@ const {GitHubError} = require('../lib/error.js')
 
 const {assign} = Object
 
-co(main)
-  .then(
-    () => stdout.write('Deployment finished successfully\n')
-  )
-  .catch(
-    ({response, message}) => halt(response, message)
-  )
+if (GITHUB_RELEASE_OAUTH && GIT_REPO_TAG && GIT_REPO_OWNER && ARTIFACTS_DIRECTORY) {
+  co(main)
+    .then(
+      () => stdout.write('Deployment finished successfully\n')
+    )
+    .catch(
+      ({response, message}) => halt(response, message)
+    )
+} else {
+  stdout.write('Missing environment variables\nSkip GitHub Release deployment\n')
+}
 
 function * main () {
   const github = new GitHubAPIs()
@@ -39,7 +43,6 @@ function * main () {
     type: 'token',
     token: GITHUB_RELEASE_OAUTH
   })
-  const {repos} = github
   const DESC = {
     user: GIT_REPO_OWNER,
     repo: GIT_REPO_NAME,
@@ -55,15 +58,15 @@ function * main () {
   })
   const RELEASE_INFO = yield new Promise(
     (resolve, reject) =>
-      repos.getReleaseByTag(DESC)
+      github.repos.getReleaseByTag(DESC)
         .then(
           ({id}) =>
-            repos.editRelease(assign({}, RELEASE_PROTO, {id}))
+            github.repos.editRelease(assign({}, RELEASE_PROTO, {id}))
               .then(resolve, msgerr(reject, 'Editing release failed'))
         )
         .catch(
           () =>
-            repos.createRelease(RELEASE_PROTO)
+            github.repos.createRelease(RELEASE_PROTO)
               .then(resolve, msgerr(reject, 'Creating release failed'))
         )
   )
@@ -83,7 +86,7 @@ function * main () {
       )
       .map(
         request =>
-          repos.uploadAsset(request)
+          github.repos.uploadAsset(request)
       )
     yield Promise.all(all)
   } catch (error) {

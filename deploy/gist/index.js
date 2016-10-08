@@ -33,7 +33,6 @@ if (!GIST_ID || !GIST_TOKEN) {
 }
 
 const github = new GitHubAPIs()
-const {gists} = github
 const files = {}
 const ENCODING = {encoding: 'utf8'}
 const CONTAINER = join(__dirname, '..', '..', 'out')
@@ -57,7 +56,7 @@ github.authenticate({
 co(main)
 
 function * main () {
-  const artifactsResponse = yield gists.edit({
+  const artifactsResponse = yield github.gists.edit({
     id: GIST_ID,
     files
   })
@@ -69,7 +68,7 @@ function * main () {
     },
     `# Release ${GIT_REPO_TAG} - ${NOW.toISOString()}\n\n`
   )
-  yield gists.edit({
+  yield github.gists.edit({
     id: GIST_ID,
     files: {
       [ filename('summary.md') ]: {
