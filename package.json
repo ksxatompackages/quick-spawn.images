@@ -15,7 +15,7 @@
     "fix": "bash -c './sh/fix.sh'",
     "test": "bash -c './sh/test.sh'",
     "build": "bash -c 'BUILD_MODE=Release ./sh/build.sh'",
-    "preview": "node ./sh/preview.js"
+    "preview": "bash -c './sh/preview.sh'"
   },
   "license": "MIT"
 }

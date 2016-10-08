@@ -21,6 +21,7 @@ temp.*
 /*.debug
 /.preview.md
 /.preview.html
+/sh/previewer.sh
 
 # Logs
 logs
