@@ -68,7 +68,7 @@ function * main () {
     },
     `# Release ${GIT_REPO_TAG} - ${NOW.toISOString()}\n\n`
   )
-  yield gists.edit({
+  yield github.gists.edit({
     id: GIST_ID,
     files: {
       [ filename('summary.md') ]: {
