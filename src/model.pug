@@ -4,6 +4,7 @@ doctype xml
 - const HEIGHT = 64
 - const FONTSIZE = 50
 - const BORDERSIZE = 2
+- const BORDERRADIUS = Math.min(WIDTH, HEIGHT) >> 2
 svg(
   xmlns = W3C + '2000/svg'
   xlink = W3C + '1999/xlink'
@@ -18,6 +19,8 @@ svg(
     stroke = color
     fill = 'transparent'
     stroke-width = BORDERSIZE
+    rx = BORDERRADIUS
+    ry = BORDERRADIUS
   )
   text(
     x = WIDTH >> 1
