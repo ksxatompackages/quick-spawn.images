@@ -24,7 +24,7 @@ const {
 
 if (!RELEASE_GIST) {
   stdout.write('Skipped Gist release\n')
-  exit(1)
+  exit(0)
 }
 
 if (!GIST_ID || !GIST_TOKEN) {
