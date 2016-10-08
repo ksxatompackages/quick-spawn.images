@@ -1,10 +1,11 @@
 doctype xml
 - const W3C = 'http://www.w3.org/'
-- const WIDTH = 320
-- const HEIGHT = 64
-- const FONTSIZE = 50
-- const BORDERSIZE = 2
-- const BORDERRADIUS = Math.min(WIDTH, HEIGHT) >> 2
+- const RATIO = 2 / 3
+- const WIDTH = 321 * RATIO
+- const HEIGHT = 64 * RATIO
+- const FONTSIZE = 50 * RATIO
+- const BORDERSIZE = 1
+- const BORDERRADIUS = Math.min(WIDTH, HEIGHT) / 4
 svg(
   xmlns = W3C + '2000/svg'
   xlink = W3C + '1999/xlink'
@@ -12,8 +13,8 @@ svg(
   height = HEIGHT
 )
   rect(
-    x = BORDERSIZE >> 1
-    y = BORDERSIZE >> 1
+    x = BORDERSIZE / 2
+    y = BORDERSIZE / 2
     width = WIDTH - BORDERSIZE
     height = HEIGHT - BORDERSIZE
     stroke = color
@@ -23,8 +24,8 @@ svg(
     ry = BORDERRADIUS
   )
   text(
-    x = WIDTH >> 1
-    y = HEIGHT >> 1
+    x = WIDTH / 2
+    y = HEIGHT / 2
     alignment-baseline = 'central'
     text-anchor = 'middle'
     font-size = FONTSIZE
