@@ -1,3 +1,4 @@
+export CI_TOOL='TravisCI'
 [ -z TRAVIS_TAG ] && {
   export BUILD_MODE=Debug
 } || {
