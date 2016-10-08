@@ -17,3 +17,5 @@ temp.*
 /deploy
 docs
 dev-lib
+/.preview.md
+/.preview.html
