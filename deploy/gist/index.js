@@ -8,6 +8,8 @@ const {readFileSync, readdirSync} = require('fs')
 
 const GitHubAPIs = require('github')
 
+const co = require('co')
+
 const {
   env: {
     RELEASE_GIST,
@@ -22,7 +24,7 @@ const {
 
 if (!RELEASE_GIST) {
   stdout.write('Skipped Gist release\n')
-  exit(1)
+  exit(0)
 }
 
 if (!GIST_ID || !GIST_TOKEN) {
@@ -51,38 +53,27 @@ github.authenticate({
   token: GIST_TOKEN
 })
 
-new Promise(
-  (resolve, reject) => {
-    github.gists.edit({
-      id: GIST_ID,
-      files
-    })
-      .then(
-        response => {
-          const rfiles = response.files
-          let summary = `# Release ${GIT_REPO_TAG} - ${NOW.toISOString()}\n\n`
-          for (const item of LIST) {
-            const {raw_url: url, type, language} = rfiles[filename(item)]
-            summary += ` * [${item}](${url})\n  - Type: ${type}\n  - Language: ${language}\n\n`
-          }
-          github.gists.edit({
-            id: GIST_ID,
-            files: {
-              [ filename('summary.md') ]: {
-                content: summary
-              }
-            }
-          })
-            .then(resolve)
-            .catch(reject)
-        }
-      )
-      .catch(reject)
-  }
-)
-  .catch(
-    () => {
-      stderr.write('Upload to Gist failed.\n')
-      exit(2)
-    }
+co(main)
+
+function * main () {
+  const artifactsResponse = yield github.gists.edit({
+    id: GIST_ID,
+    files
+  })
+  const rfiles = artifactsResponse.files
+  const summary = LIST.reduce(
+    (prev, item) => {
+      const {raw_url: url, type, language} = rfiles[filename(item)]
+      return prev + ` * [${item}](${url})\n  - Type: ${type}\n  - Language: ${language}\n\n`
+    },
+    `# Release ${GIT_REPO_TAG} - ${NOW.toISOString()}\n\n`
   )
+  yield github.gists.edit({
+    id: GIST_ID,
+    files: {
+      [ filename('summary.md') ]: {
+        content: summary
+      }
+    }
+  })
+}
