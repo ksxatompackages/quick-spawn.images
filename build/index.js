@@ -2,7 +2,6 @@
 
 const {join, dirname, parse: parsePath} = require('path')
 const {writeFileSync, readdirSync, readFileSync} = require('fs')
-const {BUILD_MODE} = require('process').env
 const pug = require('pug')
 const PROJECT = dirname(__dirname)
 const OUTPUT = join(PROJECT, 'out')
