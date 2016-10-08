@@ -19,6 +19,8 @@ temp.*
 /debug
 /debug.*
 /*.debug
+/.preview.md
+/.preview.html
 
 # Logs
 logs

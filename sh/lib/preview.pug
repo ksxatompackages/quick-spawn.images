@@ -1,0 +1,15 @@
+doctype html
+html(style = html.style)
+  head
+    title Image Preview
+  body
+    p
+      h1 Preview
+      table
+        tbody
+          each item in list
+            tr
+              td
+                a(href = item.file) #{item.name}
+              td
+                img(src = item.file)
