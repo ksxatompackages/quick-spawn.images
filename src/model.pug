@@ -1,5 +1,6 @@
 doctype xml
 - const {color, text} = local
+- const FONTFAMILY = require('../dev-lib/font-family.js')
 - const W3C = 'http://www.w3.org/'
 - const RATIO = 2 / 3
 - const WIDTH = 321 * RATIO
@@ -35,7 +36,7 @@ svg(
     stroke-width = BORDERSIZE
     style = {
       'text-transform': 'uppercase',
-      'font-family': 'Seogoe UI, Corbel, DejaVu Sans, Calibri, Vera, Roman, Tahoma, serif'
+      'font-family': FONTFAMILY
     }
   )
     | #{text}
