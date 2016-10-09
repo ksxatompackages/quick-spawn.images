@@ -21,7 +21,7 @@ const scripts = readdirSync(SCRIPTS)
   )
   .map(
     ([local, name]) =>
-      [{local, global, name, __dirname, __filename}, name]
+      [{local, global, name, require, __dirname, __filename}, name]
   )
 
 write(true)
