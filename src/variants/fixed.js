@@ -1,4 +1,4 @@
 'use strict'
 const text = 'fixed'
-const color = 'blue'
-module.exports = {text, color}
+const borderColor = 'blue'
+module.exports = {text, borderColor}

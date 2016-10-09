@@ -1,4 +1,4 @@
 'use strict'
 const text = 'exprimental'
-const color = 'orange'
-module.exports = {text, color}
+const borderColor = 'orange'
+module.exports = {text, borderColor}

@@ -1,5 +1,5 @@
 doctype xml
-- const {color, text} = local
+- const {borderColor, text} = local
 - const FONTFAMILY = require('../dev-lib/font-family.js')
 - const W3C = 'http://www.w3.org/'
 - const RATIO = 2 / 3
@@ -19,7 +19,7 @@ svg(
     y = BORDERSIZE / 2
     width = WIDTH - BORDERSIZE
     height = HEIGHT - BORDERSIZE
-    stroke = color
+    stroke = borderColor
     fill = 'transparent'
     stroke-width = BORDERSIZE
     rx = BORDERRADIUS
@@ -31,7 +31,7 @@ svg(
     alignment-baseline = 'central'
     text-anchor = 'middle'
     font-size = FONTSIZE
-    stroke = color
+    stroke = borderColor
     fill = 'transparent'
     stroke-width = BORDERSIZE
     style = {
