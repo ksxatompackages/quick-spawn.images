@@ -20,6 +20,10 @@ const scripts = readdirSync(SCRIPTS)
     ([script, {name}]) =>
       [require(script), name]
   )
+  .map(
+    ([local, name]) =>
+      [{local, global, name, require, __dirname, __filename}, name]
+  )
 
 BUILD_MODE === 'Debug' || write(false, 'min')
 write('\x20\x20', 'pretty')
