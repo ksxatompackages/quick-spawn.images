@@ -68,9 +68,14 @@ function * main () {
   const branch = TARGET_GITHUB_REPO_BRANCH
   const ref = `heads/${branch}`
   const {object: {sha: refSHA}} = yield github.gitdata.getReference({user, repo, ref})
+  info('Base Reference SHA', refSHA)
   const {sha: commitSHA} = yield github.gitdata.getCommit({user, repo, refSHA})
+  info('Base Commit SHA', commitSHA)
   const parents = [commitSHA]
   const {sha: baseTreeSHA, tree: baseTree} = yield github.gitdata.getTree({user, repo, sha: commitSHA})
+  info('Base Tree SHA', baseTreeSHA)
+  info({baseTree, baseTreeSHA})
+  info(`Reading ${ARTIFACTS_DIRECTORY}`)
   const list = readdirSync(ARTIFACTS_DIRECTORY)
     .map(
       item => [
@@ -103,6 +108,7 @@ function * main () {
       )
     )
   const listreponse = yield Promise.all(list)
+  info('listreponse', listreponse)
   const listpath = listreponse.map(
     ({item, sha}) =>
       [join(TARGET_GITHUB_REPO_DIRECTORY, item), sha]
@@ -114,10 +120,13 @@ function * main () {
     ({path}) => listpath.every(([diff]) => path !== diff)
   )
   const resultTree = [...restTree, ...diffTree]
+  info({listpath, diffTree, restTree, baseTree, resultTree})
   const {sha: tree} = yield github.gitdata.createTree({tree: resultTree, base_tree: baseTreeSHA, user, repo})
+  info('New Tree SHA', tree)
   const message = (
     `Update /${TARGET_GITHUB_REPO_DIRECTORY} to ${GIT_REPO_TAG}\n * Branch: ${repo}\n * Done automatically`
   )
   const {sha} = yield github.gitdata.createCommit({user, repo, message, tree, parents})
+  info('New Commit SHA', sha)
   yield github.gitdata.updateReference({user, repo, ref, sha})
 }
