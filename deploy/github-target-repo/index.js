@@ -63,27 +63,24 @@ function * main () {
   })
   const list = readdirSync(ARTIFACTS_DIRECTORY)
     .map(
-      item => function * () {
-        const load = (resolve, reject) => {
-          const callback = (error, data) =>
-            error ? reject(error) : resolve(data)
+      item =>
+        (resolve, reject) => {
+          const callback = (error, content) =>
+            error ? reject(error) : resolve({content, item})
           readFile(join(ARTIFACTS_DIRECTORY, item), ENCODING, callback)
         }
-        const content = yield new Promise(load)
-        const message = (
-          `Update /${TARGET_GITHUB_REPO_DIRECTORY} to ${GIT_REPO_TAG}\n * Branch: ${TARGET_GITHUB_REPO_DIRECTORY}\n * Done automatically`
-        )
-        yield github.repos.createFile({
-          user: TARGET_GITHUB_REPO_OWNER,
-          repo: TARGET_GITHUB_REPO_NAME,
-          branch: TARGET_GITHUB_REPO_BRANCH,
-          path: join(TARGET_GITHUB_REPO_DIRECTORY, item),
-          content,
-          message,
-          __proto__: null
-        })
-      }
     )
-    .map(co)
-  yield Promise.all(list)
+    .map(
+      fn =>
+        new Promise(fn)
+    )
+  const user = TARGET_GITHUB_REPO_OWNER
+  const repo = TARGET_GITHUB_REPO_NAME
+  const branch = TARGET_GITHUB_REPO_BRANCH
+  for (const promise of list) {
+    const {content, item} = yield promise
+    const path = join(TARGET_GITHUB_REPO_DIRECTORY, item)
+    const message = `Update /${path} to ${GIT_REPO_TAG}\n * Branch: ${branch}\n * Done automatically`
+    yield github.repos.createFile({user, repo, branch, path, content, message})
+  }
 }
