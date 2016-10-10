@@ -114,7 +114,7 @@ function * main () {
     ({path}) => listpath.every(([diff]) => path !== diff)
   )
   const resultTree = [...restTree, ...diffTree]
-  const {sha: tree} = yield github.gitdata.createTree({tree: resultTree, base_tree: baseTree, user, repo})
+  const {sha: tree} = yield github.gitdata.createTree({tree: resultTree, base_tree: baseTreeSHA, user, repo})
   const message = (
     `Update /${TARGET_GITHUB_REPO_DIRECTORY} to ${GIT_REPO_TAG}\n * Branch: ${repo}\n * Done automatically`
   )
