@@ -74,7 +74,7 @@ function * main () {
   const parents = [baseCommitSHA]
   const {sha: baseTreeSHA, tree: baseTree} = yield github.gitdata.getTree({user, repo, sha: baseCommitSHA})
   info('Base Tree SHA', baseTreeSHA)
-  info({baseTree, baseTreeSHA})
+  info({baseTree, baseTreeSHA, baseCommitSHA, baseRefSHA})
   info(`Reading ${ARTIFACTS_DIRECTORY}`)
   const list = readdirSync(ARTIFACTS_DIRECTORY)
     .map(
@@ -128,5 +128,6 @@ function * main () {
   )
   const {sha} = yield github.gitdata.createCommit({user, repo, message, tree, parents})
   info('New Commit SHA', sha)
+  info({resultCommitSHA: sha, resultTreeSHA: tree})
   yield github.gitdata.updateReference({user, repo, ref, sha})
 }
