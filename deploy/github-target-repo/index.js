@@ -106,7 +106,7 @@ function * main () {
     tree: listreponse.map(
       ({item, sha}) => ({
         path: join(TARGET_GITHUB_REPO_DIRECTORY, item),
-        blob: FILEBLOB,
+        mode: FILEBLOB,
         type: 'blob',
         base_tree: baseTreeSHA,
         sha,
