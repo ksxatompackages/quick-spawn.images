@@ -25,7 +25,7 @@ const {info, error} = global.console
 
 const encoding = 'utf8'
 const ENCODING = {encoding}
-const FILEBLOB = 100644
+const FILEBLOBMODE = 100644
 
 const handle = (
   TARGET_GITHUB_RELEASE_OAUTH && TARGET_GITHUB_REPO_OWNER && TARGET_GITHUB_REPO_NAME && TARGET_GITHUB_REPO_DIRECTORY && ARTIFACTS_DIRECTORY
@@ -106,7 +106,7 @@ function * main () {
     tree: listreponse.map(
       ({item, sha}) => ({
         path: join(TARGET_GITHUB_REPO_DIRECTORY, item),
-        mode: FILEBLOB,
+        mode: FILEBLOBMODE,
         type: 'blob',
         base_tree: baseTreeSHA,
         sha,
