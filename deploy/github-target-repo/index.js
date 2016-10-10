@@ -67,12 +67,12 @@ function * main () {
   const repo = TARGET_GITHUB_REPO_NAME
   const branch = TARGET_GITHUB_REPO_BRANCH
   const ref = `heads/${branch}`
-  const {object: {sha: refSHA}} = yield github.gitdata.getReference({user, repo, ref})
-  info('Base Reference SHA', refSHA)
-  const {sha: commitSHA} = yield github.gitdata.getCommit({user, repo, sha: refSHA})
-  info('Base Commit SHA', commitSHA)
-  const parents = [commitSHA]
-  const {sha: baseTreeSHA, tree: baseTree} = yield github.gitdata.getTree({user, repo, sha: commitSHA})
+  const {object: {sha: baseRefSHA}} = yield github.gitdata.getReference({user, repo, ref})
+  info('Base Reference SHA', baseRefSHA)
+  const {sha: baseCommitSHA} = yield github.gitdata.getCommit({user, repo, sha: baseRefSHA})
+  info('Base Commit SHA', baseCommitSHA)
+  const parents = [baseCommitSHA]
+  const {sha: baseTreeSHA, tree: baseTree} = yield github.gitdata.getTree({user, repo, sha: baseCommitSHA})
   info('Base Tree SHA', baseTreeSHA)
   info({baseTree, baseTreeSHA})
   info(`Reading ${ARTIFACTS_DIRECTORY}`)
