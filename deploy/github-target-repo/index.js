@@ -67,9 +67,10 @@ function * main () {
   const repo = TARGET_GITHUB_REPO_NAME
   const branch = TARGET_GITHUB_REPO_BRANCH
   const ref = `heads/${branch}`
-  const {object: {sha: baseSHA}} = yield github.gitdata.getReference({user, repo, ref})
-  const parents = [baseSHA]
-  const {sha: baseTreeSHA} = yield github.gitdata.getTree({user, repo, sha: baseSHA})
+  const {object: {sha: refSHA}} = yield github.gitdata.getReference({user, repo, ref})
+  const {sha: commitSHA} = yield github.gitdata.getCommit({user, repo, refSHA})
+  const parents = [commitSHA]
+  const {sha: baseTreeSHA, tree: baseTree} = yield github.gitdata.getTree({user, repo, sha: commitSHA})
   const list = readdirSync(ARTIFACTS_DIRECTORY)
     .map(
       item => [
@@ -102,21 +103,18 @@ function * main () {
       )
     )
   const listreponse = yield Promise.all(list)
-  const {sha: tree} = yield github.gitdata.createTree({
-    tree: listreponse.map(
-      ({item, sha}) => ({
-        path: join(TARGET_GITHUB_REPO_DIRECTORY, item),
-        mode: FILEBLOBMODE,
-        type: 'blob',
-        base_tree: baseTreeSHA,
-        sha,
-        __proto__: null
-      })
-    ),
-    user,
-    repo,
-    __proto__: null
-  })
+  const listpath = listreponse.map(
+    ({item, sha}) =>
+      [join(TARGET_GITHUB_REPO_DIRECTORY, item), sha]
+  )
+  const diffTree = listpath.map(
+    ([path, sha]) => ({mode: FILEBLOBMODE, type: 'blob', path, sha})
+  )
+  const restTree = baseTree.filter(
+    ({path}) => listpath.every(([diff]) => path !== diff)
+  )
+  const resultTree = [...restTree, ...diffTree]
+  const {sha: tree} = yield github.gitdata.createTree({tree: resultTree, base_tree: baseTree, user, repo})
   const message = (
     `Update /${TARGET_GITHUB_REPO_DIRECTORY} to ${GIT_REPO_TAG}\n * Branch: ${repo}\n * Done automatically`
   )
