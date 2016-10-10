@@ -74,7 +74,7 @@ function * main () {
   const parents = [baseCommitSHA]
   const {sha: baseTreeSHA, tree: baseTree} = yield github.gitdata.getTree({user, repo, sha: baseCommitSHA})
   info('Base Tree SHA', baseTreeSHA)
-  info({baseTree, baseTreeSHA, baseCommitSHA, baseRefSHA})
+  info({baseTreeSHA, baseCommitSHA, baseRefSHA})
   info(`Reading ${ARTIFACTS_DIRECTORY}`)
   const list = readdirSync(ARTIFACTS_DIRECTORY)
     .map(
@@ -120,7 +120,6 @@ function * main () {
     ({path}) => listpath.every(([diff]) => path !== diff)
   )
   const resultTree = [...restTree, ...diffTree]
-  info({listpath, diffTree, restTree, baseTree, resultTree})
   const {sha: tree} = yield github.gitdata.createTree({tree: resultTree, base_tree: baseTreeSHA, user, repo})
   info('New Tree SHA', tree)
   const message = (
