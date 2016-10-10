@@ -69,7 +69,7 @@ function * main () {
   const ref = `heads/${branch}`
   const {object: {sha: refSHA}} = yield github.gitdata.getReference({user, repo, ref})
   info('Base Reference SHA', refSHA)
-  const {sha: commitSHA} = yield github.gitdata.getCommit({user, repo, refSHA})
+  const {sha: commitSHA} = yield github.gitdata.getCommit({user, repo, sha: refSHA})
   info('Base Commit SHA', commitSHA)
   const parents = [commitSHA]
   const {sha: baseTreeSHA, tree: baseTree} = yield github.gitdata.getTree({user, repo, sha: commitSHA})
