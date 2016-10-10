@@ -69,7 +69,6 @@ function * main () {
   const ref = `heads/${branch}`
   const {object: {sha: baseSHA}} = yield github.gitdata.getReference({user, repo, ref})
   const parents = [baseSHA]
-  const {sha: baseTreeSHA} = yield github.gitdata.getTree({user, repo, sha: baseSHA})
   const list = readdirSync(ARTIFACTS_DIRECTORY)
     .map(
       item => [
@@ -108,7 +107,6 @@ function * main () {
         path: join(TARGET_GITHUB_REPO_DIRECTORY, item),
         blob: FILEBLOB,
         type: 'blob',
-        base_tree: baseTreeSHA,
         sha,
         __proto__: null
       })
