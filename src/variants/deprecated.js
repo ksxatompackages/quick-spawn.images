@@ -1,4 +1,4 @@
 'use strict'
 const text = 'deprecated'
-const borderColor = 'red'
-module.exports = {text, borderColor}
+const color = 'red'
+module.exports = {text, color}
