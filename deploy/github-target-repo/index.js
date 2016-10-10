@@ -120,5 +120,6 @@ function * main () {
   const message = (
     `Update /${TARGET_GITHUB_REPO_DIRECTORY} to ${GIT_REPO_TAG}\n * Branch: ${repo}\n * Done automatically`
   )
-  yield github.gitdata.createCommit({user, repo, message, tree, parents})
+  const {sha} = yield github.gitdata.createCommit({user, repo, message, tree, parents})
+  yield github.gitdata.updateReference({user, repo, ref, sha})
 }
