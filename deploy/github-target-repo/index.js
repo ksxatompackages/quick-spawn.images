@@ -23,7 +23,7 @@ const GitHubAPIs = require('github')
 
 const {info, error} = global.console
 
-const ENCODING = {encoding: 'utf8'}
+const ENCODING = {encoding: 'base64'}
 
 const handle = (
   TARGET_GITHUB_RELEASE_OAUTH && TARGET_GITHUB_REPO_OWNER && TARGET_GITHUB_REPO_NAME && TARGET_GITHUB_REPO_DIRECTORY && ARTIFACTS_DIRECTORY
@@ -69,8 +69,7 @@ function * main () {
             error ? reject(error) : resolve(data)
           readFile(join(ARTIFACTS_DIRECTORY, item), ENCODING, callback)
         }
-        const data = yield new Promise(load)
-        const content = data.toString('base64')
+        const content = yield new Promise(load)
         const message = (
           `Update /${TARGET_GITHUB_REPO_DIRECTORY} to ${GIT_REPO_TAG}\n * Branch: ${TARGET_GITHUB_REPO_DIRECTORY}\n * Done automatically`
         )
