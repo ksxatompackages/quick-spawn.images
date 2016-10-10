@@ -102,7 +102,7 @@ function * main () {
       )
     )
   const listreponse = yield Promise.all(list)
-  const {sha: tree} = github.gitdata.createTree({
+  const {sha: tree} = yield github.gitdata.createTree({
     tree: listreponse.map(
       ({item, sha}) => ({
         path: join(TARGET_GITHUB_REPO_DIRECTORY, item),
