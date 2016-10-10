@@ -25,7 +25,7 @@ const {info, error} = global.console
 
 const encoding = 'utf8'
 const ENCODING = {encoding}
-const FILEBLOB = 100644
+const FILEBLOBMODE = '100644'
 
 const handle = (
   TARGET_GITHUB_RELEASE_OAUTH && TARGET_GITHUB_REPO_OWNER && TARGET_GITHUB_REPO_NAME && TARGET_GITHUB_REPO_DIRECTORY && ARTIFACTS_DIRECTORY
@@ -67,8 +67,15 @@ function * main () {
   const repo = TARGET_GITHUB_REPO_NAME
   const branch = TARGET_GITHUB_REPO_BRANCH
   const ref = `heads/${branch}`
-  const {object: {sha: baseSHA}} = yield github.gitdata.getReference({user, repo, ref})
-  const parents = [baseSHA]
+  const {object: {sha: baseRefSHA}} = yield github.gitdata.getReference({user, repo, ref})
+  info('Base Reference SHA', baseRefSHA)
+  const {sha: baseCommitSHA} = yield github.gitdata.getCommit({user, repo, sha: baseRefSHA})
+  info('Base Commit SHA', baseCommitSHA)
+  const parents = [baseCommitSHA]
+  const {sha: baseTreeSHA, tree: baseTree} = yield github.gitdata.getTree({user, repo, sha: baseCommitSHA})
+  info('Base Tree SHA', baseTreeSHA)
+  info({baseTree, baseTreeSHA, baseCommitSHA, baseRefSHA})
+  info(`Reading ${ARTIFACTS_DIRECTORY}`)
   const list = readdirSync(ARTIFACTS_DIRECTORY)
     .map(
       item => [
@@ -101,22 +108,26 @@ function * main () {
       )
     )
   const listreponse = yield Promise.all(list)
-  const {sha: tree} = github.gitdata.createTree({
-    tree: listreponse.map(
-      ({item, sha}) => ({
-        path: join(TARGET_GITHUB_REPO_DIRECTORY, item),
-        blob: FILEBLOB,
-        type: 'blob',
-        sha,
-        __proto__: null
-      })
-    ),
-    user,
-    repo,
-    __proto__: null
-  })
+  info('listreponse', listreponse)
+  const listpath = listreponse.map(
+    ({item, sha}) =>
+      [join(TARGET_GITHUB_REPO_DIRECTORY, item), sha]
+  )
+  const diffTree = listpath.map(
+    ([path, sha]) => ({mode: FILEBLOBMODE, type: 'blob', path, sha})
+  )
+  const restTree = baseTree.filter(
+    ({path}) => listpath.every(([diff]) => path !== diff)
+  )
+  const resultTree = [...restTree, ...diffTree]
+  info({listpath, diffTree, restTree, baseTree, resultTree})
+  const {sha: tree} = yield github.gitdata.createTree({tree: resultTree, base_tree: baseTreeSHA, user, repo})
+  info('New Tree SHA', tree)
   const message = (
     `Update /${TARGET_GITHUB_REPO_DIRECTORY} to ${GIT_REPO_TAG}\n * Branch: ${repo}\n * Done automatically`
   )
-  yield github.gitdata.createCommit({user, repo, message, tree, parents})
+  const {sha} = yield github.gitdata.createCommit({user, repo, message, tree, parents})
+  info('New Commit SHA', sha)
+  info({resultCommitSHA: sha, resultTreeSHA: tree})
+  yield github.gitdata.updateReference({user, repo, ref, sha})
 }
