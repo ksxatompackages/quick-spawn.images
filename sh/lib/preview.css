@@ -1,0 +1,27 @@
+
+
+table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+  vertical-align: middle;
+  align-items: center;
+  align-self: center;
+  text-align: center;
+  position: relative;
+}
+
+table, td {
+  border: 1px solid black;
+}
+
+tr.odd {
+  background: rgba(125, 125, 125, 0.5);
+}
+
+tr.even {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.member .index {
+  font-family: consolas, monospace;
+}
