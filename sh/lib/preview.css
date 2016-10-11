@@ -11,11 +11,11 @@ table {
 }
 
 table, td {
-  border: 1px solid black;
+  border: 1px solid gray;
 }
 
 tr.odd {
-  background: rgba(125, 125, 125, 0.5);
+  background: rgba(221, 221, 221, 0.5);
 }
 
 tr.even {

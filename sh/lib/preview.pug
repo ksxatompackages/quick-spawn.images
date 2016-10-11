@@ -7,11 +7,11 @@ html#document-element.main(style = html.style)
   body#document-body.main
     h1.title.header Preview
     table#main-table.main
+      tr.title.odd(style = {background: 'font-weight: bold'})
+        td.index Index
+        td.file File
+        td.view View
       tbody.main
-        tr.title.odd(style = {background: 'font-weight: bold'})
-          td.index Index
-          td.file File
-          td.view View
         each item, index in list
           tr.member(class = index & 1 ? 'odd' : 'even')
             td.index
