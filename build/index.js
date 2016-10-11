@@ -2,7 +2,6 @@
 
 const {join, dirname, parse: parsePath} = require('path')
 const {writeFileSync, readdirSync, readFileSync} = require('fs')
-const {BUILD_MODE} = require('process').env
 const pug = require('pug')
 const PROJECT = dirname(__dirname)
 const OUTPUT = join(PROJECT, 'out')
@@ -20,13 +19,16 @@ const scripts = readdirSync(SCRIPTS)
     ([script, {name}]) =>
       [require(script), name]
   )
+  .map(
+    ([local, name]) =>
+      [{local, global, name, require, __dirname, __filename}, name]
+  )
 
-BUILD_MODE === 'Debug' || write(false, 'min')
-write('\x20\x20', 'pretty')
+write(true)
 
 console.log(`Build succeed!\nArtifacts are located at ${OUTPUT}`)
 
-function write (pretty, entry) {
+function write (pretty) {
   const OPTIONS = {
     doctype: 'xml',
     pretty
@@ -34,7 +36,7 @@ function write (pretty, entry) {
   return scripts
     .map(
       ([local, name]) =>
-        [local, join(OUTPUT, `${name}.${entry}.svg`), pug.compile(PUGSOURCE, OPTIONS)]
+        [local, join(OUTPUT, `${name}.svg`), pug.compile(PUGSOURCE, OPTIONS)]
     )
     .map(
       ([local, file, create]) =>

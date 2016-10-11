@@ -1,4 +1,5 @@
 {
+  "name": "auto-image-creator",
   "version": "0.0.0",
   "main": "index.js",
   "author": "Hoàng Văn Khải <hvksmr1996@gmail.com>",
@@ -13,6 +14,8 @@
     "clean-all": "bash -c './sh/clean-all.sh'",
     "fix": "bash -c './sh/fix.sh'",
     "test": "bash -c './sh/test.sh'",
-    "build": "bash -c 'BUILD_MODE=Release ./sh/build.sh'"
-  }
+    "build": "bash -c 'BUILD_MODE=Release ./sh/build.sh'",
+    "preview": "bash -c './sh/preview.sh'"
+  },
+  "license": "MIT"
 }
