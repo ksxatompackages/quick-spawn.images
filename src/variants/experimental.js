@@ -1,4 +1,4 @@
 'use strict'
-const text = 'exprimental'
+const text = 'experimental'
 const color = 'orange'
 module.exports = {text, color}
