@@ -7,11 +7,11 @@
 
 ## Target
 
- * Repo: [quick-spawn](https://github.com/ksxatompackages/quick-spawn)
+* Repo: [quick-spawn](https://github.com/ksxatompackages/quick-spawn)
 
- * Branch: auto-images
+* Branch: auto-images
 
- * Directory: `/docs/images/badges`
+* Directory: `/docs/images/badges`
 
 ## Usage
 
@@ -40,9 +40,9 @@ npm test
 #### Preview
 
 The following scripts create `/.preview.html` which shows every created artifacts
- - `npm run preview`
- - `npm run build`
- - `npm run test` (or `npm test`)
+- `npm run preview`
+- `npm run build`
+- `npm run test` (or `npm test`)
 
 If `/sh/previewer.sh` is a file, the file will run as a bash script with `$1` is path to `/.preview.html`
 
@@ -55,9 +55,9 @@ If you push changes to a branch, CI tools will test only (by `npm test`)
 If you push tags, CI tools will do both test and deploy
 
 There're 3 types of releases depend on tag suffix
- - `-alpha`: Draft Release
- - `-beta`: Prerelease
- - no suffix: Official & Stable Release
+- `-alpha`: Draft Release
+- `-beta`: Prerelease
+- no suffix: Official & Stable Release
 
 Deployment is vary, depends on which environment variable is turned on
 
@@ -68,17 +68,17 @@ This type of deployment requires `GITHUB_RELEASE_OAUTH`
 #### Gist Repository
 
 This type of deployment requires 3 environment variables
- - `RELEASE_GIST` is set to `TRUE`
- - `GIST_ID`
- - `GIST_TOKEN`
+- `RELEASE_GIST` is set to `TRUE`
+- `GIST_ID`
+- `GIST_TOKEN`
 
 #### GitHub Repository Commit
 
 This type of deployment requires 4 environment variables
- - `TARGET_GITHUB_RELEASE_OAUTH` (optional, default to `GITHUB_RELEASE_OAUTH`)
- - `TARGET_GITHUB_REPO_OWNER`
- - `TARGET_GITHUB_REPO_NAME`
- - `TARGET_GITHUB_REPO_BRANCH`
+- `TARGET_GITHUB_RELEASE_OAUTH` (optional, default to `GITHUB_RELEASE_OAUTH`)
+- `TARGET_GITHUB_REPO_OWNER`
+- `TARGET_GITHUB_REPO_NAME`
+- `TARGET_GITHUB_REPO_BRANCH`
 
 ## License
 
